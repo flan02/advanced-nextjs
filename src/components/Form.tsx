@@ -1,25 +1,20 @@
 'use client'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useNotes } from '../app/hooks/useNotes'
+//import { NoteContext } from '@/context/NoteContext'
+
 
 function Form() {
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
-    const router = useRouter()
+    const { createNote } = useNotes()
     return (
         <form onSubmit={async (e) => {
             e.preventDefault()
-            //console.log(title, content);
-            const res = await fetch('/api/notes', { // como es lado cliente, no se pone http://localhost:3000
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ title, content })
+            await createNote({
+                title,
+                content
             })
-            const data = await res.json()
-            console.log(data)
-            router.refresh()
 
         }}>
             <input

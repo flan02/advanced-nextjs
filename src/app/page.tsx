@@ -1,23 +1,25 @@
+'use client'
+import { useEffect } from 'react'
 import Form from '@/components/Form'
-import Image from 'next/image'
+import { useNotes } from './hooks/useNotes'
 
-async function loadNotes() {
-  const res = await fetch('http://localhost:3000/api/notes')
-  const data = await res.json()
-  //console.log(data)
-  return data
-}
+
+//* Un contexto es un componente que va a englobar al resto y les va a permitir compartir estados
 
 interface Note {
-  id: string
+  id?: string
   title: string
   content: string
-  createdAt: string
+  createdAt?: string
   updatedAt?: string
 }
 
-export default async function HomePage() {
-  const notes = await loadNotes()
+export default function HomePage() {
+  const { notes, loadNotes } = useNotes()
+
+  useEffect(() => {
+    loadNotes()
+  }, [])
   return (
     <div className='flex items-center justify-center h-screen'>
       <div>
