@@ -8,18 +8,23 @@ export const NoteContext = createContext<{
     notes: Note[],
     loadNotes: () => Promise<void>,
     createNote: (note: CreateNote) => Promise<void>,
-    deleteNote: (id: string) => Promise<void>
+    deleteNote: (id: string) => Promise<void>,
+    selectedNote: Note | null,
+    setSelectedNote: (note: Note | null) => void
 }>({
     notes: [],
     loadNotes: async () => { },
     createNote: async (note: CreateNote) => { },
-    deleteNote: async (id: string) => { }
+    deleteNote: async (id: string) => { },
+    selectedNote: null,
+    setSelectedNote: (note: Note | null) => { }
 })
 
 
 
 export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
     const [notes, setNotes] = useState<Note[]>([])
+    const [selectedNote, setSelectedNote] = useState<Note | null>(null)
 
     async function loadNotes() {
 
@@ -50,7 +55,7 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
 
     }
 
-    return <NoteContext.Provider value={{ notes, loadNotes, createNote, deleteNote }}>
+    return <NoteContext.Provider value={{ notes, loadNotes, createNote, deleteNote, selectedNote, setSelectedNote }}>
         {children}
     </NoteContext.Provider>
 }
