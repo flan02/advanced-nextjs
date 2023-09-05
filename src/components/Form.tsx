@@ -8,7 +8,7 @@ function Form() {
     const [title, setTitle] = useState<string>('')
     const [content, setContent] = useState<string>('')
     const titleRef = useRef<HTMLInputElement>(null)
-    const { createNote, selectedNote, setSelectedNote } = useNotes()
+    const { createNote, selectedNote, setSelectedNote, updateNote } = useNotes()
 
     useEffect(() => {
         if (selectedNote) {
@@ -20,12 +20,20 @@ function Form() {
     return (
         <>
             <h1 className='flex justify-center mb-4 text-5xl'>{(selectedNote) ? "Edit Note" : "Add Note"}</h1>
-            <form onSubmit={async (e) => {
+            <form className="mb-8" onSubmit={async (e) => {
                 e.preventDefault()
-                await createNote({
-                    title,
-                    content
-                })
+                if (selectedNote) {
+                    updateNote(selectedNote.id, {
+                        title,
+                        content
+                    })
+                    setSelectedNote(null)
+                } else {
+                    await createNote({
+                        title,
+                        content
+                    })
+                }
                 setTitle('')
                 setContent('')
                 titleRef.current?.focus()
@@ -45,7 +53,7 @@ function Form() {
                 <div className='flex justify-end gap-x-2'>
                     <button
                         className="px-5 py-2 text-white bg-green-600 rounded-md hover:bg-green-700"
-                        type="submit">Save
+                        type="submit">{(selectedNote) ? "Update" : "Save"}
                     </button>
                     {
                         (selectedNote) && (
