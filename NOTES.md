@@ -19,3 +19,9 @@ npx prisma init --datasource-provider mongodb
 *inicia un servidor web para ver la base de datos*
 *requiere de un modelo de datos*
 
+# React hook form
+*libreria muy completa para manejar formularios*
+
+# libreria React icons
+*npm install react-icons --save*
+[React icons gallery](https://react-icons.github.io/react-icons/)

@@ -52,7 +52,8 @@ function Form() {
                 </textarea>
                 <div className='flex justify-end gap-x-2'>
                     <button
-                        className="px-5 py-2 text-white bg-green-600 rounded-md hover:bg-green-700"
+                        disabled={(title === '' || content === '') ? true : false}
+                        className="disabled:cursor-not-allowed disabled:opacity-50 px-5 py-2 text-white bg-green-600 rounded-md hover:bg-green-700"
                         type="submit">{(selectedNote) ? "Update" : "Save"}
                     </button>
                     {

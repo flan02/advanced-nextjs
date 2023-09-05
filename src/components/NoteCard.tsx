@@ -1,32 +1,33 @@
 
 import { Note } from "@/interfaces/notes"
 import { useNotes } from "@/app/hooks/useNotes"
+import { HiTrash } from "react-icons/hi";
+import { HiPencilAlt } from "react-icons/hi";
 
 
 function NoteCard({ note }: { note: Note }) {
     const { deleteNote, setSelectedNote } = useNotes()
 
     return (
-        <div key={note.id} className='flex justify-between bg-slate-400 p-4 my-2'>
+        <div key={note.id} className='flex  justify-between bg-slate-400 p-4 my-2'>
             <div>
                 <h2 className="text-2xl font-bold">{note.title}</h2>
                 <p>{note.content}</p>
                 {
                     (note.updatedAt === note.createdAt)
-                        ? (<p>createdAt {note.createdAt}</p>)
-                        : (<p>updatedAt {note.updatedAt}</p>)
+                        ? (<p>{`createdAt: ${new Date(note.createdAt).toLocaleDateString()}`}</p>)
+                        : (<p>{`updatedAt: ${new Date(note.updatedAt).toLocaleDateString()}`}</p>)
                 }
             </div>
-            <div className="flex flex-col justify-end gap-y-2">
+            <div className="flex align-content-center h-max gap-x-4">
                 <button
-                    className="px-3 py-1 text-white bg-red-600 rounded-md hover:bg-red-700"
                     onClick={async () => {
                         if (confirm('Are you sure you want to delete this note?')) await deleteNote(note.id)
-                    }}>Delete</button>
+                    }}><HiTrash className="text-3xl text-red-600 hover:text-red-700" /></button>
                 <button
-                    className="px-3 py-1 text-white bg-blue-600 rounded-md hover:bg-blue-700"
+
                     onClick={() => setSelectedNote(note)}
-                >Edit</button>
+                ><HiPencilAlt className="text-3xl text-blue-600 hover:text-blue-700" /></button>
             </div>
         </div>
     )
