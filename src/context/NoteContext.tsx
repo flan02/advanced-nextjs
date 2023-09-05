@@ -1,11 +1,13 @@
 'use client'
 import { Note, CreateNote } from '@/interfaces/notes'
-import { createContext, useState } from 'react'
+import { createContext, useState, useEffect } from 'react'
 
 
 //* Definimos los tipos de datos que va a tener el contexto
 export const NoteContext = createContext<{
     notes: Note[],
+    background: string,
+    setBackground: (background: string) => void,
     loadNotes: () => Promise<void>,
     createNote: (note: CreateNote) => Promise<void>,
     deleteNote: (id: string) => Promise<void>,
@@ -14,6 +16,8 @@ export const NoteContext = createContext<{
     updateNote: (id: string, note: CreateNote) => Promise<void>
 }>({
     notes: [],
+    background: 'light',
+    setBackground: (background: string) => { },
     loadNotes: async () => { },
     createNote: async (note: CreateNote) => { },
     deleteNote: async (id: string) => { },
@@ -25,8 +29,20 @@ export const NoteContext = createContext<{
 
 
 export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
+
+    useEffect(() => {
+        setBackground(localStorage.getItem('background') || 'light')
+    }, [])
+
     const [notes, setNotes] = useState<Note[]>([])
     const [selectedNote, setSelectedNote] = useState<Note | null>(null)
+    const [background, setBackground] = useState<string>('')
+    //* Guardamos las notas en el localstorage
+    /*
+        useEffect(() => {
+            localStorage.setItem('notes', JSON.stringify(notes))
+        }, [notes])
+    */
 
     async function loadNotes() {
         const res = await fetch('/api/notes') // lado servidor lleva http://localhost:3000
@@ -70,7 +86,7 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
         setNotes(notes.map(note => (note.id === id) ? noteUpdated : note))
     }
 
-    return <NoteContext.Provider value={{ notes, loadNotes, createNote, deleteNote, selectedNote, setSelectedNote, updateNote }}>
+    return <NoteContext.Provider value={{ background, setBackground, notes, loadNotes, createNote, deleteNote, selectedNote, setSelectedNote, updateNote }}>
         {children}
     </NoteContext.Provider>
 }

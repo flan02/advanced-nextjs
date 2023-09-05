@@ -8,7 +8,7 @@ function Form() {
     const [title, setTitle] = useState<string>('')
     const [content, setContent] = useState<string>('')
     const titleRef = useRef<HTMLInputElement>(null)
-    const { createNote, selectedNote, setSelectedNote, updateNote } = useNotes()
+    const { createNote, selectedNote, setSelectedNote, updateNote, background } = useNotes()
 
     useEffect(() => {
         if (selectedNote) {
@@ -19,7 +19,7 @@ function Form() {
 
     return (
         <>
-            <h1 className='flex justify-center mb-4 text-5xl'>{(selectedNote) ? "Edit Note" : "Add Note"}</h1>
+            <h1 className='flex justify-center mb-4 text-5xl'>{(selectedNote) ? "Edit Movie or TV show" : "Add Movie or TV show"}</h1>
             <form className="mb-8" onSubmit={async (e) => {
                 e.preventDefault()
                 if (selectedNote) {
@@ -42,12 +42,12 @@ function Form() {
                     ref={titleRef}
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="w-full px-4 py-2 my-2 text-black bg-white rounded-md focus:outline-none focus:online-none focus:ring-2 focus:ring-blue-600"
+                    className={`w-full px-4 py-2 my-2 text-black bg-white rounded-md ${background && "border border-gray-600"} focus:outline-none focus:online-none focus:ring-2 focus:ring-blue-600`}
                     type="text" name="title" id="" autoFocus placeholder="Title" />
                 <textarea
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
-                    className="w-full px-4 py-2 my-2 text-black bg-white rounded-md focus:outline-none focus:online-none focus:ring-2 focus:ring-blue-600"
+                    className={`w-full px-4 py-2 my-2 text-black bg-white rounded-md ${background && "border border-gray-600"} focus:outline-none focus:online-none focus:ring-2 focus:ring-blue-600`}
                     name="content" id="" autoFocus placeholder="Content" >
                 </textarea>
                 <div className='flex justify-end gap-x-2'>

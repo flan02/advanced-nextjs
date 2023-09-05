@@ -11,13 +11,13 @@ import { Note } from '@/interfaces/notes'
 
 
 export default function HomePage() {
-  const { notes, loadNotes } = useNotes()
+  const { notes, loadNotes, background, setBackground } = useNotes()
 
   useEffect(() => {
     loadNotes()
   }, [])
   return (
-    <div className='flex items-center justify-center h-screen'>
+    <div className={`${(background === 'light') ? "bg-orange-50 " : "bg-slate-800 text-slate-200"} flex items-center justify-center h-screen`}>
       <div>
         <Form />
         {
