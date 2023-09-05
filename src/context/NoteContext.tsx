@@ -1,22 +1,19 @@
 'use client'
+import { Note, CreateNote } from '@/interfaces/notes'
 import { createContext, useState } from 'react'
 
-interface Note {
-    id?: string
-    title: string
-    content: string
-    createdAt?: string
-    updatedAt?: string
-}
 
+//* Definimos los tipos de datos que va a tener el contexto
 export const NoteContext = createContext<{
     notes: Note[],
     loadNotes: () => Promise<void>,
-    createNote: (note: Note) => Promise<void>
+    createNote: (note: CreateNote) => Promise<void>,
+    deleteNote: (id: string) => Promise<void>
 }>({
     notes: [],
     loadNotes: async () => { },
-    createNote: async (note: Note) => { }
+    createNote: async (note: CreateNote) => { },
+    deleteNote: async (id: string) => { }
 })
 
 
@@ -31,7 +28,7 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
         setNotes(data)
     }
 
-    async function createNote(note: Note) {
+    async function createNote(note: CreateNote) {
         const res = await fetch('/api/notes', { // como es lado cliente, no se pone http://localhost:3000
             method: 'POST',
             headers: {
@@ -43,7 +40,17 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
         setNotes([...notes, data])
         //console.log(data)
     }
-    return <NoteContext.Provider value={{ notes, loadNotes, createNote }}>
+
+    async function deleteNote(id: string) {
+        const res = await fetch(`/api/notes/${id}`, {
+            method: 'DELETE'
+        })
+        //const data = await res.json()
+        setNotes(notes.filter(note => note.id !== id))
+
+    }
+
+    return <NoteContext.Provider value={{ notes, loadNotes, createNote, deleteNote }}>
         {children}
     </NoteContext.Provider>
 }
